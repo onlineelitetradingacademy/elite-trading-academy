@@ -1,7 +1,7 @@
 // FloatingContact.jsx
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiPlus, FiX, FiMessageCircle, FiPhone, FiMail } from 'react-icons/fi';
+import { FiPlus, FiMessageCircle, FiPhone, FiMail } from 'react-icons/fi';
 import { SiTelegram } from 'react-icons/si';
 import { useSettingsStore } from '../../context/store';
 
