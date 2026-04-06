@@ -6,7 +6,7 @@ import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import 'swiper/css/effect-fade';
+import 'swiper/css/autoplay';
 import { useSettingsStore } from '../../context/store';
 import { courseAPI, testimonialAPI, blogAPI, batchAPI } from '../../utils/api';
 import {
@@ -145,6 +145,7 @@ function HeroSection({ sliders, settings }) {
           <Swiper
             modules={[Autoplay, Pagination, EffectFade]}
             effect="fade"
+            fadeEffect={{ crossFade: true }}
             autoplay={{ delay: 5000, disableOnInteraction: false }}
             pagination={{ clickable: true }}
             loop
