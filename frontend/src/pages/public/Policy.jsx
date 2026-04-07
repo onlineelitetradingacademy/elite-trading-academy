@@ -1,14 +1,31 @@
 import { Helmet } from 'react-helmet-async';
-export default function Policy() {
+import { useSettingsStore } from '../../context/store';
+
+export default function Policy({ type }) {
+  const { getSetting } = useSettingsStore();
+  const config = {
+    privacy: { title: 'Privacy Policy', key: 'policy_privacy' },
+    terms: { title: 'Terms of Service', key: 'policy_terms' },
+    refund: { title: 'Refund Policy', key: 'policy_refund' },
+  };
+  const { title, key } = config[type] || config.privacy;
   return (
     <>
-      <Helmet><title>Policy — ELITE Trading Academy</title></Helmet>
-      <div className="min-h-screen pt-24 pb-16">
-        <div className="container-custom">
-          <div className="text-center py-20">
-            <h1 className="section-title mb-4">Policy</h1>
-            <p className="text-muted text-lg mt-4">Full content implemented — connects to live API</p>
-          </div>
+      <Helmet>
+        <title>{title} — ELITE Trading Academy</title>
+      </Helmet>
+      <div
+        style={{ background: '#0A0A0F' }}
+        className="min-h-screen pt-28 pb-20"
+      >
+        <div className="container-custom max-w-3xl mx-auto">
+          <h1 className="font-display text-4xl text-white mb-8">{title}</h1>
+          <div
+            className="bg-gray-900 border border-gray-700 rounded-2xl p-8 prose-dark"
+            dangerouslySetInnerHTML={{
+              __html: getSetting(key, '<p>Content coming soon.</p>'),
+            }}
+          />
         </div>
       </div>
     </>
