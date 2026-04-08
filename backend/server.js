@@ -24,16 +24,25 @@ app.use(mongoSanitize());
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
   max: 200,
-  message: { success: false, message: 'Too many requests, please try again later.' }
+  message: {
+    success: false,
+    message: 'Too many requests, please try again later.',
+  },
 });
 app.use('/api/', limiter);
 
 // ── CORS ─────────────────────────────────────────────────────────
-app.use(cors({
-  origin: [process.env.CLIENT_URL, 'http://localhost:5173', 'http://localhost:3000'],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
-}));
+app.use(
+  cors({
+    origin: [
+      process.env.CLIENT_URL,
+      'https://www.elitetradingacademy.in',
+      'https://elitetradingacademy.in',
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  }),
+);
 
 // ── Body Parsing ─────────────────────────────────────────────────
 app.use(express.json({ limit: '50mb' }));
@@ -49,34 +58,40 @@ if (process.env.NODE_ENV === 'development') {
 app.use(passport.initialize());
 
 // ── Routes ───────────────────────────────────────────────────────
-app.use('/api/auth',         require('./routes/authRoutes'));
-app.use('/api/users',        require('./routes/userRoutes'));
-app.use('/api/courses',      require('./routes/courseRoutes'));
-app.use('/api/batches',      require('./routes/batchRoutes'));
-app.use('/api/webinars',     require('./routes/webinarRoutes'));
-app.use('/api/blogs',        require('./routes/blogRoutes'));
-app.use('/api/payments',     require('./routes/paymentRoutes'));
-app.use('/api/coupons',      require('./routes/couponRoutes'));
-app.use('/api/affiliates',   require('./routes/affiliateRoutes'));
-app.use('/api/franchise',    require('./routes/franchiseRoutes'));
-app.use('/api/resources',    require('./routes/resourceRoutes'));
-app.use('/api/settings',     require('./routes/settingRoutes'));
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/courses', require('./routes/courseRoutes'));
+app.use('/api/batches', require('./routes/batchRoutes'));
+app.use('/api/webinars', require('./routes/webinarRoutes'));
+app.use('/api/blogs', require('./routes/blogRoutes'));
+app.use('/api/payments', require('./routes/paymentRoutes'));
+app.use('/api/coupons', require('./routes/couponRoutes'));
+app.use('/api/affiliates', require('./routes/affiliateRoutes'));
+app.use('/api/franchise', require('./routes/franchiseRoutes'));
+app.use('/api/resources', require('./routes/resourceRoutes'));
+app.use('/api/settings', require('./routes/settingRoutes'));
 app.use('/api/testimonials', require('./routes/testimonialRoutes'));
-app.use('/api/gallery',      require('./routes/galleryRoutes'));
-app.use('/api/notifications',require('./routes/notificationRoutes'));
-app.use('/api/support',      require('./routes/supportRoutes'));
-app.use('/api/careers',      require('./routes/careerRoutes'));
-app.use('/api/landing',      require('./routes/landingRoutes'));
-app.use('/api/analytics',    require('./routes/analyticsRoutes'));
+app.use('/api/gallery', require('./routes/galleryRoutes'));
+app.use('/api/notifications', require('./routes/notificationRoutes'));
+app.use('/api/support', require('./routes/supportRoutes'));
+app.use('/api/careers', require('./routes/careerRoutes'));
+app.use('/api/landing', require('./routes/landingRoutes'));
+app.use('/api/analytics', require('./routes/analyticsRoutes'));
 
 // ── Health Check ─────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
-  res.json({ success: true, message: 'ELITE Trading Academy API running 🚀', env: process.env.NODE_ENV });
+  res.json({
+    success: true,
+    message: 'ELITE Trading Academy API running 🚀',
+    env: process.env.NODE_ENV,
+  });
 });
 
 // ── 404 Handler ──────────────────────────────────────────────────
 app.use((req, res) => {
-  res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found` });
+  res
+    .status(404)
+    .json({ success: false, message: `Route ${req.originalUrl} not found` });
 });
 
 // ── Global Error Handler ─────────────────────────────────────────
@@ -93,26 +108,37 @@ app.use((err, req, res, next) => {
   }
   // Mongoose validation
   if (err.name === 'ValidationError') {
-    message = Object.values(err.errors).map(e => e.message).join(', ');
+    message = Object.values(err.errors)
+      .map((e) => e.message)
+      .join(', ');
     statusCode = 400;
   }
   // JWT errors
-  if (err.name === 'JsonWebTokenError') { message = 'Invalid token'; statusCode = 401; }
-  if (err.name === 'TokenExpiredError') { message = 'Token expired'; statusCode = 401; }
+  if (err.name === 'JsonWebTokenError') {
+    message = 'Invalid token';
+    statusCode = 401;
+  }
+  if (err.name === 'TokenExpiredError') {
+    message = 'Token expired';
+    statusCode = 401;
+  }
 
   res.status(statusCode).json({ success: false, message });
 });
 
 // ── Database + Server Start ───────────────────────────────────────
-mongoose.connect(process.env.MONGO_URI)
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => {
     console.log('✅ MongoDB connected');
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
-      console.log(`🚀 ELITE Trading Academy API running on port ${PORT} [${process.env.NODE_ENV}]`);
+      console.log(
+        `🚀 ELITE Trading Academy API running on port ${PORT} [${process.env.NODE_ENV}]`,
+      );
     });
   })
-  .catch(err => {
+  .catch((err) => {
     console.error('❌ MongoDB connection error:', err.message);
     process.exit(1);
   });

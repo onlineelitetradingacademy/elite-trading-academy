@@ -302,11 +302,11 @@ VITE_RAZORPAY_KEY_ID = your_razorpay_key_id
 1. In your domain registrar, add:
    - Type: CNAME
    - Name: api
-   - Value: your-railway-url.railway.app
+   - Value: your-railway-url.railway.app              elite-trading-academy-backend.onrender.com
 2. In Railway → Your service → Settings → Custom Domain
 3. Add: api.elitetradingacademy.in
 4. This makes your API available at: api.elitetradingacademy.in
-5. Update VITE_API_URL in Vercel to: https://api.elitetradingacademy.in
+5. Update VITE_API_URL in Vercel to: https://api.elitetradingacademy.in    used (https://api.elitetradingacademy.in/api)
 
 ### Step 4 — SSL Certificate
 
