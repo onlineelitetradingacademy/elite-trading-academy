@@ -36,8 +36,8 @@ app.use(
   cors({
     origin: [
       process.env.CLIENT_URL,
-      'https://www.elitetradingacademy.in',
-      'https://elitetradingacademy.in',
+      'http://localhost:5173',
+      'http://localhost:3000',
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
