@@ -101,6 +101,9 @@ export default function App() {
 
   useEffect(() => {
     if (!isLoaded) return;
+
+    console.log('TawkID:', getSetting('tawkto_id')); // ← ADD THIS LINE
+
     const tawkId = getSetting('tawkto_id');
     if (!tawkId) return;
     const s = document.createElement('script');
