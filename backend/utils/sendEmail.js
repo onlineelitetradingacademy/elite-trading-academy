@@ -1,13 +1,13 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  host:   process.env.SMTP_HOST,
-  port:   process.env.SMTP_PORT,
-  secure: false,
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  secure: true,
   auth: {
     user: process.env.SMTP_EMAIL,
-    pass: process.env.SMTP_PASSWORD
-  }
+    pass: process.env.SMTP_PASSWORD,
+  },
 });
 
 const brandColor = '#F0A500';
@@ -62,14 +62,16 @@ const baseTemplate = (content) => `
 
 // ── Email Templates ───────────────────────────────────────────────
 const templates = {
-  emailOTP: (name, otp) => baseTemplate(`
+  emailOTP: (name, otp) =>
+    baseTemplate(`
     <h2>Verify Your Email 📧</h2>
     <p>Hi ${name},</p>
     <p>Use the OTP below to verify your email address. This code expires in <strong>10 minutes</strong>.</p>
     <div class="otp-box">${otp}</div>
     <p>Do not share this OTP with anyone. ELITE Trading Academy will never ask for your OTP.</p>`),
 
-  welcome: (name) => baseTemplate(`
+  welcome: (name) =>
+    baseTemplate(`
     <h2>Welcome to ELITE Trading Academy! 🎉</h2>
     <p>Hi ${name},</p>
     <p>You've successfully joined <strong>ELITE Trading Academy</strong> — your journey to becoming an elite trader starts today!</p>
@@ -81,7 +83,8 @@ const templates = {
     </div>
     <a href="${process.env.CLIENT_URL}/courses" class="btn">Explore Courses →</a>`),
 
-  enrollmentConfirmation: (name, courseName, amount) => baseTemplate(`
+  enrollmentConfirmation: (name, courseName, amount) =>
+    baseTemplate(`
     <h2>Enrollment Confirmed! 🎓</h2>
     <p>Hi ${name},</p>
     <p>You've successfully enrolled in <strong>${courseName}</strong>. Start learning right away!</p>
@@ -92,14 +95,16 @@ const templates = {
     </div>
     <a href="${process.env.CLIENT_URL}/dashboard/courses" class="btn">Start Learning →</a>`),
 
-  resetPassword: (name, resetUrl) => baseTemplate(`
+  resetPassword: (name, resetUrl) =>
+    baseTemplate(`
     <h2>Reset Your Password 🔐</h2>
     <p>Hi ${name},</p>
     <p>You requested a password reset. Click the button below. This link expires in <strong>10 minutes</strong>.</p>
     <a href="${resetUrl}" class="btn">Reset Password →</a>
     <p style="margin-top:16px; color:#888; font-size:13px;">If you didn't request this, please ignore this email and your password will remain unchanged.</p>`),
 
-  affiliateApproved: (name, code) => baseTemplate(`
+  affiliateApproved: (name, code) =>
+    baseTemplate(`
     <h2>You're Now an Affiliate! 🤝</h2>
     <p>Hi ${name},</p>
     <p>Congratulations! Your affiliate application has been <strong>approved</strong>.</p>
@@ -110,7 +115,8 @@ const templates = {
     </div>
     <a href="${process.env.CLIENT_URL}/dashboard/affiliate" class="btn">View Affiliate Dashboard →</a>`),
 
-  webinarReminder: (name, webinarTitle, scheduledAt, link) => baseTemplate(`
+  webinarReminder: (name, webinarTitle, scheduledAt, link) =>
+    baseTemplate(`
     <h2>Webinar Reminder 📅</h2>
     <p>Hi ${name},</p>
     <p>Your webinar is starting soon!</p>
@@ -121,7 +127,8 @@ const templates = {
     </div>
     <a href="${link}" class="btn">Join Webinar →</a>`),
 
-  franchiseLeadAck: (name) => baseTemplate(`
+  franchiseLeadAck: (name) =>
+    baseTemplate(`
     <h2>Application Received! 🤝</h2>
     <p>Hi ${name},</p>
     <p>Thank you for your interest in the <strong>ELITE Trading Academy Franchise Programme</strong>.</p>
@@ -130,33 +137,62 @@ const templates = {
       <p>⚠️ Please note: Complete franchise details are shared only after the initial screening. This process ensures we partner with the right individuals who are serious about building a trading education business.</p>
     </div>`),
 
-  newDeviceLogin: (name, device, time) => baseTemplate(`
+  newDeviceLogin: (name, device, time) =>
+    baseTemplate(`
     <h2>New Login Detected ⚠️</h2>
     <p>Hi ${name},</p>
     <p>A new login was detected on your account.</p>
     <div class="info-box">
       <p>📱 Device: ${device}<br>⏰ Time: ${time}</p>
     </div>
-    <p>If this was you, no action needed. If not, please <a href="${process.env.CLIENT_URL}/account/security">secure your account immediately</a>.</p>`)
+    <p>If this was you, no action needed. If not, please <a href="${process.env.CLIENT_URL}/account/security">secure your account immediately</a>.</p>`),
 };
 
 // ── Send Email Function ───────────────────────────────────────────
 const sendEmail = async ({ to, subject, template, data = {} }) => {
   let html;
   switch (template) {
-    case 'emailOTP':              html = templates.emailOTP(data.name, data.otp); break;
-    case 'welcome':               html = templates.welcome(data.name); break;
-    case 'enrollmentConfirmation':html = templates.enrollmentConfirmation(data.name, data.courseName, data.amount); break;
-    case 'resetPassword':         html = templates.resetPassword(data.name, data.resetUrl); break;
-    case 'affiliateApproved':     html = templates.affiliateApproved(data.name, data.code); break;
-    case 'webinarReminder':       html = templates.webinarReminder(data.name, data.webinarTitle, data.scheduledAt, data.link); break;
-    case 'franchiseLeadAck':      html = templates.franchiseLeadAck(data.name); break;
-    case 'newDeviceLogin':        html = templates.newDeviceLogin(data.name, data.device, data.time); break;
-    default: html = baseTemplate(`<p>${data.body || ''}</p>`);
+    case 'emailOTP':
+      html = templates.emailOTP(data.name, data.otp);
+      break;
+    case 'welcome':
+      html = templates.welcome(data.name);
+      break;
+    case 'enrollmentConfirmation':
+      html = templates.enrollmentConfirmation(
+        data.name,
+        data.courseName,
+        data.amount,
+      );
+      break;
+    case 'resetPassword':
+      html = templates.resetPassword(data.name, data.resetUrl);
+      break;
+    case 'affiliateApproved':
+      html = templates.affiliateApproved(data.name, data.code);
+      break;
+    case 'webinarReminder':
+      html = templates.webinarReminder(
+        data.name,
+        data.webinarTitle,
+        data.scheduledAt,
+        data.link,
+      );
+      break;
+    case 'franchiseLeadAck':
+      html = templates.franchiseLeadAck(data.name);
+      break;
+    case 'newDeviceLogin':
+      html = templates.newDeviceLogin(data.name, data.device, data.time);
+      break;
+    default:
+      html = baseTemplate(`<p>${data.body || ''}</p>`);
   }
   await transporter.sendMail({
     from: `"${process.env.FROM_NAME}" <${process.env.FROM_EMAIL}>`,
-    to, subject, html
+    to,
+    subject,
+    html,
   });
 };
 
