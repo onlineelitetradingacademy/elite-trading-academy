@@ -115,11 +115,12 @@ export default function App() {
   // ← ADD META PIXEL useEffect
 
   useEffect(() => {
-    if (!isLoaded) return;
     const timer = setTimeout(() => {
       const pixelId = useSettingsStore.getState().settings['meta_pixel_id'];
       if (!pixelId) return;
+      if (document.getElementById('meta-pixel-script')) return;
       const script = document.createElement('script');
+      script.id = 'meta-pixel-script';
       script.innerHTML = `
       !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -130,10 +131,10 @@ export default function App() {
       fbq('track', 'PageView');
     `;
       document.head.appendChild(script);
-    }, 3000);
+    }, 5000);
     return () => clearTimeout(timer);
-  }, [isLoaded]);
-
+  }, []);
+  
   return (
     <HelmetProvider>
       <BrowserRouter>
