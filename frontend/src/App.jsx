@@ -129,7 +129,7 @@ export default function App() {
     fbq('track', 'PageView');
   `;
     document.head.appendChild(script);
-  }, [isLoaded]);
+  }, [isLoaded, getSetting]);
 
   return (
     <HelmetProvider>
