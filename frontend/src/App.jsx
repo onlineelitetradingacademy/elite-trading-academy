@@ -116,6 +116,9 @@ export default function App() {
 
   useEffect(() => {
     if (!isLoaded) return;
+
+    console.log('Full settings:', useSettingsStore.getState().settings); // ← ADD HERE
+
     const pixelId = useSettingsStore.getState().settings['meta_pixel_id'];
     if (!pixelId) return;
     const script = document.createElement('script');
