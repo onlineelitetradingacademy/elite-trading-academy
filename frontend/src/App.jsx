@@ -115,26 +115,20 @@ export default function App() {
   // ← ADD META PIXEL useEffect
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const pixelId = useSettingsStore.getState().settings['meta_pixel_id'];
-      if (!pixelId) return;
-      if (document.getElementById('meta-pixel-script')) return;
-      const script = document.createElement('script');
-      script.id = 'meta-pixel-script';
-      script.innerHTML = `
-      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-      document,'script','https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '${pixelId}');
-      fbq('track', 'PageView');
-    `;
-      document.head.appendChild(script);
-    }, 5000);
-    return () => clearTimeout(timer);
+    const script = document.createElement('script');
+    script.id = 'meta-pixel-script';
+    script.innerHTML = `
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '4086466794994800');
+    fbq('track', 'PageView');
+  `;
+    document.head.appendChild(script);
   }, []);
-  
+
   return (
     <HelmetProvider>
       <BrowserRouter>
