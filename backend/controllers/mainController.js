@@ -476,19 +476,18 @@ exports.createTicket = async (req, res, next) => {
 
 exports.getTickets = async (req, res, next) => {
   try {
-    const { status, priority } = req.query;
-    const query = {};
-    if (status)   query.status = status;
-    if (priority) query.priority = priority;
-    const tickets = await Support.find(query).populate('user', 'name email').sort({ createdAt: -1 });
-    res.json({ success: true, data: tickets });
+    const filter = {};
+    if (req.query.status) filter.status = req.query.status;
+    const tickets = await Support.find(filter).sort({ createdAt: -1 }).populate('user', 'name email avatar phone');
+    res.json({ success: true, data: tickets, total: tickets.length });
   } catch (err) { next(err); }
+};
 };
 
 exports.getMyTickets = async (req, res, next) => {
   try {
-    const tickets = await Support.find({ user: req.user.id }).sort({ createdAt: -1 });
-    res.json({ success: true, data: tickets });
+    const tickets = await Support.find({ user: req.user.id }).sort({ createdAt: -1 }).populate('user', 'name email avatar');
+    res.json({ success: true, data: tickets, total: tickets.length });
   } catch (err) { next(err); }
 };
 
@@ -496,8 +495,21 @@ exports.replyTicket = async (req, res, next) => {
   try {
     const ticket = await Support.findById(req.params.id);
     if (!ticket) return res.status(404).json({ success: false, message: 'Ticket not found' });
-    ticket.replies.push({ user: req.user.id, message: req.body.message, isAdmin: ['admin','sub_admin'].includes(req.user.role) });
+    const isAdmin = ['admin','sub_admin'].includes(req.user.role);
+    ticket.replies.push({ user: req.user.id, message: req.body.message, isAdmin });
     if (req.body.status) ticket.status = req.body.status;
+    if (isAdmin && ticket.status === 'open') ticket.status = 'in_progress';
+    await ticket.save();
+    await ticket.populate('user', 'name email avatar');
+    res.json({ success: true, data: ticket });
+  } catch (err) { next(err); }
+};
+
+exports.updateTicketStatus = async (req, res, next) => {
+  try {
+    const ticket = await Support.findById(req.params.id);
+    if (!ticket) return res.status(404).json({ success: false, message: 'Ticket not found' });
+    ticket.status = req.body.status;
     await ticket.save();
     res.json({ success: true, data: ticket });
   } catch (err) { next(err); }

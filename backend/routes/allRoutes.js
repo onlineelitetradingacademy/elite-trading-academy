@@ -155,10 +155,11 @@ module.exports.settingRoutes = settingRouter;
 
 // ── SUPPORT ROUTES ────────────────────────────────────────────────
 const supportRouter = express.Router();
-supportRouter.post('/',         ctrl.createTicket);
-supportRouter.get('/',          protect, adminOnly, ctrl.getTickets);
-supportRouter.get('/my',        protect, ctrl.getMyTickets);
-supportRouter.post('/:id/reply', protect, ctrl.replyTicket);
+supportRouter.post('/',            ctrl.createTicket);
+supportRouter.get('/',             protect, adminOnly, ctrl.getTickets);
+supportRouter.get('/my',           protect, ctrl.getMyTickets);
+supportRouter.post('/:id/reply',   protect, ctrl.replyTicket);
+supportRouter.patch('/:id/status', protect, ctrl.updateTicketStatus);
 module.exports.supportRoutes = supportRouter;
 
 // ── CAREER ROUTES ─────────────────────────────────────────────────
