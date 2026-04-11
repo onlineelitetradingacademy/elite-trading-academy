@@ -144,7 +144,7 @@ courseSchema.pre('save', function (next) {
       slugify(this.title, { lower: true, strict: true }) + '-' + Date.now();
   }
   // Recalculate average rating
-  if (this.reviews.length > 0) {
+  if (this.reviews && this.reviews.length > 0) {
     this.averageRating =
       this.reviews.reduce((acc, r) => acc + r.rating, 0) / this.reviews.length;
     this.totalReviews = this.reviews.length;
