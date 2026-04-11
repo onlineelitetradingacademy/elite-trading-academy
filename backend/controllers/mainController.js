@@ -496,9 +496,14 @@ exports.replyTicket = async (req, res, next) => {
     const ticket = await Support.findById(req.params.id);
     if (!ticket) return res.status(404).json({ success: false, message: 'Ticket not found' });
     const isAdmin = ['admin','sub_admin'].includes(req.user.role);
-    ticket.replies.push({ user: req.user.id, message: req.body.message, isAdmin });
+    // Only add reply if message is not empty
+    if (req.body.message && req.body.message.trim()) {
+      ticket.replies.push({ user: req.user.id, message: req.body.message, isAdmin });
+    }
+    // Update status if provided
     if (req.body.status) ticket.status = req.body.status;
-    if (isAdmin && ticket.status === 'open') ticket.status = 'in_progress';
+    // Auto-set in_progress when admin first replies
+    else if (isAdmin && ticket.status === 'open' && req.body.message) ticket.status = 'in_progress';
     await ticket.save();
     await ticket.populate('user', 'name email avatar');
     res.json({ success: true, data: ticket });
