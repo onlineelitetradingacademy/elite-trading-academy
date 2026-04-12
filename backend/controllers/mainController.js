@@ -474,8 +474,9 @@ exports.createTicket = async (req, res, next) => {
       user: req.user.id,
       name: req.body.name || req.user.name,
       email: req.body.email || req.user.email,
+      phone: req.body.phone || req.user.phone,
     });
-    await ticket.populate('user', 'name email avatar');
+    await ticket.populate('user', 'name email avatar phone');
     res.status(201).json({ success: true, data: ticket, message: 'Support ticket created! We will respond within 24 hours.' });
   } catch (err) { next(err); }
 };

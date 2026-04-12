@@ -138,7 +138,8 @@ export default function AdminSupport() {
                       {ticket.status?.replace('_',' ')}
                     </span>
                   </div>
-                  <p className="text-gray-500 text-xs">From: {ticket.user?.name || 'Guest'} • {ticket.category}</p>
+                  <p className="text-gray-500 text-xs">From: {ticket.user?.name || ticket.name || 'Guest'} • {ticket.category}</p>
+                  {(ticket.user?.phone || ticket.phone) && <p className="text-green-400 text-xs">📱 {ticket.user?.phone || ticket.phone}</p>}
                   <div className="flex items-center justify-between mt-1">
                     <p className="text-gray-600 text-xs">{new Date(ticket.createdAt).toLocaleDateString('en-IN')}</p>
                     {ticket.replies?.length > 0 && <p className="text-yellow-400 text-xs">💬 {ticket.replies.length}</p>}
@@ -166,11 +167,12 @@ export default function AdminSupport() {
                       <option value="closed">Closed</option>
                     </select>
                   </div>
-                  <p className="text-gray-500 text-xs">
-                    From: <span className="text-white">{selected.user?.name || 'Guest'}</span>
-                    {selected.user?.email && <span> ({selected.user.email})</span>}
-                    {' '}• {selected.category}
-                  </p>
+                  <div className="flex flex-wrap gap-3 mt-1 text-xs text-gray-500">
+                    <span>From: <span className="text-white">{selected.user?.name || selected.name || 'Guest'}</span></span>
+                    {(selected.user?.email || selected.email) && <span>📧 {selected.user?.email || selected.email}</span>}
+                    {(selected.user?.phone || selected.phone) && <span className="text-green-400 font-medium">📱 {selected.user?.phone || selected.phone}</span>}
+                    <span>• {selected.category}</span>
+                  </div>
                 </div>
 
                 {/* Messages */}
