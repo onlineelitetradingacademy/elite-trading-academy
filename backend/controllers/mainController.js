@@ -469,7 +469,13 @@ exports.deleteGalleryItem = async (req, res, next) => {
 // ════════════════════════════════════════════════════════════
 exports.createTicket = async (req, res, next) => {
   try {
-    const ticket = await Support.create({ ...req.body, user: req.user?.id });
+    const ticket = await Support.create({
+      ...req.body,
+      user: req.user.id,
+      name: req.body.name || req.user.name,
+      email: req.body.email || req.user.email,
+    });
+    await ticket.populate('user', 'name email avatar');
     res.status(201).json({ success: true, data: ticket, message: 'Support ticket created! We will respond within 24 hours.' });
   } catch (err) { next(err); }
 };
@@ -481,7 +487,6 @@ exports.getTickets = async (req, res, next) => {
     const tickets = await Support.find(filter).sort({ createdAt: -1 }).populate('user', 'name email avatar phone');
     res.json({ success: true, data: tickets, total: tickets.length });
   } catch (err) { next(err); }
-};
 };
 
 exports.getMyTickets = async (req, res, next) => {
