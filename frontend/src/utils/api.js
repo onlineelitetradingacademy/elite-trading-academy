@@ -165,6 +165,7 @@ export const webinarAPI = {
   getAll: () => api.get('/webinars'),
   getOne: (id) => api.get(`/webinars/${id}`),
   register: (id) => api.post(`/webinars/${id}/register`),
+  getRegistrants: (id) => api.get(`/webinars/${id}/registrants`),
   create: (d) => api.post('/webinars', d),
   update: (id, d) => api.put(`/webinars/${id}`, d),
   delete: (id) => api.delete(`/webinars/${id}`),
