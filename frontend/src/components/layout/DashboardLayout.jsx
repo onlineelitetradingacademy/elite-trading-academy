@@ -1,7 +1,7 @@
 import { Outlet, NavLink, Link, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useAuthStore } from '../../context/store';
-import { FiHome, FiBook, FiBarChart2, FiUsers, FiUser, FiHelpCircle, FiMenu, FiLogOut } from 'react-icons/fi';
+import { FiHome, FiBook, FiBarChart2, FiUsers, FiUser, FiHelpCircle, FiMenu, FiLogOut, FiVideo } from 'react-icons/fi';
 import { supportAPI } from '../../utils/api';
 
 export default function DashboardLayout() {
@@ -73,6 +73,7 @@ export default function DashboardLayout() {
   const navItems = [
     { label: 'Overview',      href: '/dashboard',               icon: FiHome },
     { label: 'My Courses',    href: '/dashboard/courses',       icon: FiBook },
+    { label: 'Webinars',      href: '/dashboard/webinars',      icon: FiVideo },
     { label: 'Trading Tools', href: '/dashboard/trading-tools', icon: FiBarChart2 },
     { label: 'Affiliate Hub', href: '/dashboard/affiliate',     icon: FiUsers },
     { label: 'Profile',       href: '/dashboard/profile',       icon: FiUser },

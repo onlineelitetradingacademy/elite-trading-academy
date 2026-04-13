@@ -78,8 +78,11 @@ exports.adminGetBlogs = async (req, res, next) => {
 // ════════════════════════════════════════════════════════════
 exports.getBatches = async (req, res, next) => {
   try {
-    const { type, isActive = true } = req.query;
-    const query = { isActive };
+    const { type, isActive } = req.query;
+    const query = {};
+    // Only filter by isActive if explicitly passed (frontend public page passes isActive=true)
+    // Admin panel fetches without isActive param to see ALL batches
+    if (isActive !== undefined) query.isActive = isActive === 'true';
     if (type) query.type = type;
     const batches = await Batch.find(query).populate('instructor', 'name avatar').sort({ startDate: 1 });
     res.json({ success: true, data: batches });
@@ -144,6 +147,15 @@ exports.registerWebinar = async (req, res, next) => {
     webinar.registeredUsers.push(req.user.id);
     await webinar.save();
     res.json({ success: true, message: 'Registered for webinar successfully!', meetingLink: webinar.meetingLink });
+  } catch (err) { next(err); }
+};
+
+exports.getWebinarRegistrants = async (req, res, next) => {
+  try {
+    const webinar = await Webinar.findById(req.params.id)
+      .populate('registeredUsers', 'name email phone avatar createdAt');
+    if (!webinar) return res.status(404).json({ success: false, message: 'Webinar not found' });
+    res.json({ success: true, data: webinar.registeredUsers, total: webinar.registeredUsers.length });
   } catch (err) { next(err); }
 };
 
