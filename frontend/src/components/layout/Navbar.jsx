@@ -17,6 +17,7 @@ const navItems = [
       { label: 'Technical Analysis',   href: '/courses?category=technical_analysis' },
       { label: '─────────────',        href: null },
       { label: 'Live Batches',         href: '/batches' },
+      { label: 'Personal Mentorship',  href: '/mentorship' },
       { label: 'Free Workshop 🆓',     href: '/courses?isFree=true', badge: 'Free' },
     ]
   },

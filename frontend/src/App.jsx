@@ -16,6 +16,7 @@ const Home = lazy(() => import('./pages/public/Home'));
 const Courses = lazy(() => import('./pages/public/Courses'));
 const CourseDetail = lazy(() => import('./pages/public/CourseDetail'));
 const Batches = lazy(() => import('./pages/public/Batches'));
+const Mentorship = lazy(() => import('./pages/public/Mentorship'));
 const Webinars = lazy(() => import('./pages/public/Webinars'));
 const Blog = lazy(() => import('./pages/public/Blog'));
 const BlogDetail = lazy(() => import('./pages/public/BlogDetail'));
@@ -156,6 +157,7 @@ export default function App() {
               <Route path="/courses" element={<Courses />} />
               <Route path="/courses/:slug" element={<CourseDetail />} />
               <Route path="/batches" element={<Batches />} />
+              <Route path="/mentorship" element={<Mentorship />} />
               <Route path="/webinars" element={<Webinars />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogDetail />} />

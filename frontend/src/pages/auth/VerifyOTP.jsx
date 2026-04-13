@@ -14,7 +14,7 @@ export function VerifyOTP() {
   const inputs = useRef([]);
   const navigate = useNavigate();
   const location = useLocation();
-  const { userId, email } = location.state || {};
+  const { userId, email, from } = location.state || {};
   const { setAuth } = useAuthStore();
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export function VerifyOTP() {
       const res = await authAPI.verifyEmail({ userId, otp: code });
       setAuth(res.data.user, res.data.token, res.data.refreshToken);
       toast.success('Email verified! Welcome to ELITE Trading Academy! 🎉');
-      navigate('/dashboard');
+      navigate(from || '/dashboard');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Invalid OTP');
       setOtp(['', '', '', '', '', '']);

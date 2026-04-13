@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -28,13 +28,16 @@ export default function Register() {
   } = useForm();
   const navigate = useNavigate();
 
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/dashboard';
+
   const onSubmit = async (data) => {
     setLoading(true);
     try {
       const res = await authAPI.register(data);
       toast.success('Account created! Please verify your email.');
       navigate('/auth/verify-otp', {
-        state: { userId: res.data.userId, email: data.email },
+        state: { userId: res.data.userId, email: data.email, from },
       });
     } catch (err) {
       toast.error(err.response?.data?.message || 'Registration failed');
