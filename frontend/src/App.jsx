@@ -52,6 +52,7 @@ const TradingTools = lazy(() => import('./pages/student/TradingTools'));
 const AffiliateHub = lazy(() => import('./pages/student/AffiliateHub'));
 const Profile = lazy(() => import('./pages/student/Profile'));
 const MyTickets = lazy(() => import('./pages/student/MyTickets'));
+const MyWebinars = lazy(() => import('./pages/student/MyWebinars'));
 const Checkout = lazy(() => import('./pages/student/Checkout'));
 
 // ── Lazy Imports — Admin ──────────────────────────────────────────
@@ -239,6 +240,7 @@ export default function App() {
               <Route path="affiliate" element={<AffiliateHub />} />
               <Route path="profile" element={<Profile />} />
               <Route path="support" element={<MyTickets />} />
+              <Route path="webinars" element={<MyWebinars />} />
             </Route>
 
             {/* ── CHECKOUT ── */}
